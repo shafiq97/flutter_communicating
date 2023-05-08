@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_comunicating/user/user_screen.dart';
 import 'auth/login.dart';
+import 'auth/register.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,8 +20,10 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const LoginScreen(),
+        '/register': (context) => const RegistrationScreen(),
         '/home': (context) => const HomeScreen(),
         '/user': (context) => const UserHomeScreen(),
+        '/login': (context) => const LoginScreen()
       },
       onUnknownRoute: (settings) {
         return MaterialPageRoute(

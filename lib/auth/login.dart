@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       // Send an HTTP request to the login API
       final response = await http.post(
-        Uri.parse('http://192.168.50.91/flutter_communicating_api/login.php'),
+        Uri.parse('http://192.168.68.100/flutter_communicating_api/login.php'),
         body: {
           'email': _emailController.text,
           'password': _passwordController.text
@@ -121,6 +121,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     ElevatedButton(
                       onPressed: _submitForm,
                       child: const Text('Login'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/register');
+                      },
+                      child: const Text(
+                        'Register',
+                      ),
                     ),
                   ],
                 ),

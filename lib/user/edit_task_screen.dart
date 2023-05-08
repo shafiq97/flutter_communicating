@@ -43,7 +43,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     // Send an HTTP request to update the task
     final response = await http.post(
       Uri.parse(
-          'http://192.168.50.91/flutter_communicating_api/update_task.php'),
+          'http://192.168.68.100/flutter_communicating_api/update_task.php'),
       body: {
         'id': widget.task['id'].toString(),
         'title': _titleController.text,
