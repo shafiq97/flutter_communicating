@@ -29,8 +29,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
       // Send an HTTP request to the registration API
       final response = await http.post(
-        Uri.parse(
-            'http://192.168.68.100/flutter_communicating_api/register.php'),
+        Uri.parse('http://172.20.10.3/flutter_communicating_api/register.php'),
         body: {
           'email': _emailController.text,
           'password': _passwordController.text,
@@ -170,8 +169,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         },
                       ),
                       const SizedBox(height: 16.0),
-                      DropdownButtonFormField(
-                        value: 'manager',
+                      DropdownButtonFormField<String>(
+                        value: null,
+                        hint: const Text('Select a role'),
                         decoration: const InputDecoration(
                           labelText: 'Role',
                           border: OutlineInputBorder(),
@@ -190,6 +190,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           setState(() {
                             _roleController.text = value!;
                           });
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select a role';
+                          }
+                          return null;
                         },
                       ),
                       const SizedBox(height: 16.0),

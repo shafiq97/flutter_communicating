@@ -29,7 +29,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     const String email =
         'shafiq@gmail.com'; // Replace with the email address of the logged-in user
     final Uri uri = Uri.parse(
-        'http://192.168.68.100/flutter_communicating_api/get_tasks.php?email=$email');
+        'http://172.20.10.3/flutter_communicating_api/get_tasks.php?email=$email');
 
     // Send an HTTP request to the API to fetch the tasks
     final response = await http.get(uri);
@@ -117,7 +117,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     // Send an HTTP request to delete the task
                     final response = await http.post(
                       Uri.parse(
-                          'http://192.168.68.100/flutter_communicating_api/delete_task.php'),
+                          'http://172.20.10.3/flutter_communicating_api/delete_task.php'),
                       body: {
                         'id': task['id'].toString(),
                       },

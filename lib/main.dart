@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const LoginScreen(),
         '/register': (context) => const RegistrationScreen(),
         '/home': (context) => const HomeScreen(),
-        '/user': (context) => const UserHomeScreen(),
+        '/employee': (context) => const UserHomeScreen(),
         '/login': (context) => const LoginScreen()
       },
       onUnknownRoute: (settings) {

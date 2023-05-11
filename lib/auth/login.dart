@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       // Send an HTTP request to the login API
       final response = await http.post(
-        Uri.parse('http://192.168.68.100/flutter_communicating_api/login.php'),
+        Uri.parse('http://172.20.10.3/flutter_communicating_api/login.php'),
         body: {
           'email': _emailController.text,
           'password': _passwordController.text
@@ -37,17 +37,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (response.body.isNotEmpty) {
         // Parse the JSON response
-// Parse the JSON response
         final data = jsonDecode(response.body);
-
         if (data['success']) {
           // Check the role of the user
-          if (data['role'] == 'admin') {
+          if (data['role'] == 'manager') {
             // Navigate to the admin screen if the user is an admin
-            Navigator.pushNamed(context, '/admin');
+            Navigator.pushNamed(context, '/manager');
           } else {
             // Navigate to the user screen if the user is not an admin
-            Navigator.pushNamed(context, '/user');
+            Navigator.pushNamed(context, '/employeee');
           }
         } else {
           // Display an error message if the login fails
