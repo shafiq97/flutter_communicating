@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class MessageScreen extends StatefulWidget {
   final String userEmail;
+  final String senderEmail;
 
-  const MessageScreen({Key? key, required this.userEmail}) : super(key: key);
+  const MessageScreen(
+      {Key? key, required this.userEmail, required this.senderEmail})
+      : super(key: key);
 
   @override
   _MessageScreenState createState() => _MessageScreenState();
@@ -12,10 +18,34 @@ class MessageScreen extends StatefulWidget {
 class _MessageScreenState extends State<MessageScreen> {
   TextEditingController _messageController = TextEditingController();
 
-  void _sendMessage() {
+  void _sendMessage() async {
     String message = _messageController.text;
-    // Implement your logic to send the message to the user with the provided email
-    print('Sending message to ${widget.userEmail}: $message');
+    String senderEmail = widget.senderEmail; // Replace with the sender's email
+    String receiverEmail = widget.userEmail; // Receiver's email
+
+    // Prepare the message data
+    Map<String, dynamic> messageData = {
+      'sender_email': senderEmail,
+      'receiver_email': receiverEmail,
+      'message': message,
+    };
+
+    // Send an HTTP request to insert the message
+    final response = await http.post(
+      Uri.parse(
+          'http://172.20.10.3/flutter_communicating_api/send_message.php'),
+      body: jsonEncode(messageData),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    // Parse the JSON response
+    final data = jsonDecode(response.body);
+
+    // Display a snackbar with the response message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(data['message'])),
+    );
+
     _messageController.clear();
   }
 
@@ -29,10 +59,10 @@ class _MessageScreenState extends State<MessageScreen> {
         children: [
           Expanded(
             child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: TextField(
                 controller: _messageController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Message',
                 ),
                 maxLines: null,
@@ -41,7 +71,7 @@ class _MessageScreenState extends State<MessageScreen> {
           ),
           ElevatedButton(
             onPressed: _sendMessage,
-            child: Text('Send'),
+            child: const Text('Send'),
           ),
         ],
       ),

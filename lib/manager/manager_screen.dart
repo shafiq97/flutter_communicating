@@ -166,13 +166,14 @@ class _ManagerScreenState extends State<ManagerScreen> {
                     title: Text(employee['name']),
                     subtitle: Text(employee['email']),
                     trailing: IconButton(
-                      icon: Icon(Icons.message),
+                      icon: const Icon(Icons.message),
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => MessageScreen(
                               userEmail: employee['email'],
+                              senderEmail: widget.userEmail,
                             ),
                           ),
                         );
