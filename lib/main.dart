@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_comunicating/manager/manager_screen.dart';
+import 'package:flutter_comunicating/manager/tasks.dart';
 import 'package:flutter_comunicating/user/user_screen.dart';
 import 'auth/login.dart';
 import 'auth/register.dart';
@@ -25,7 +26,10 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/employee': (context) => UserHomeScreen(
             userEmail: ModalRoute.of(context)!.settings.arguments as String),
-        '/manager': (context) => const ManagerScreen(),
+        '/manager': (context) => ManagerScreen(
+            userEmail: ModalRoute.of(context)!.settings.arguments as String),
+        '/manager_task_screen': (context) => ManagerManageTasks(
+            email: ModalRoute.of(context)!.settings.arguments as String),
         '/login': (context) => const LoginScreen()
       },
       onUnknownRoute: (settings) {
