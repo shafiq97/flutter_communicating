@@ -41,17 +41,12 @@ class _LoginScreenState extends State<LoginScreen> {
         if (data['success']) {
           // Check the role of the user
           if (data['role'] == 'manager') {
-            // Navigate to the admin screen if the user is an admin
-            Navigator.pushNamed(context, '/manager');
+            // Navigate to the manager screen if the user is a manager
+            Navigator.pushNamed(context, '/manager', arguments: data['email']);
           } else {
-            // Navigate to the user screen if the user is not an admin
-            Navigator.pushNamed(context, '/employeee');
+            // Navigate to the user screen if the user is not a manager
+            Navigator.pushNamed(context, '/employee', arguments: data['email']);
           }
-        } else {
-          // Display an error message if the login fails
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(data['message'])),
-          );
         }
       } else {
         // Handle null response

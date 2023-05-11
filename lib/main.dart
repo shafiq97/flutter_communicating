@@ -23,7 +23,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const LoginScreen(),
         '/register': (context) => const RegistrationScreen(),
         '/home': (context) => const HomeScreen(),
-        '/employee': (context) => const UserHomeScreen(),
+        '/employee': (context) => UserHomeScreen(
+            userEmail: ModalRoute.of(context)!.settings.arguments as String),
         '/manager': (context) => const ManagerScreen(),
         '/login': (context) => const LoginScreen()
       },

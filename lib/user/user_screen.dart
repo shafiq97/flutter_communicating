@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../shared/profile.dart';
 import 'add_task_screen.dart';
 import 'edit_task_screen.dart';
 
 class UserHomeScreen extends StatefulWidget {
-  const UserHomeScreen({Key? key}) : super(key: key);
+  final String userEmail;
+  const UserHomeScreen({Key? key, required this.userEmail}) : super(key: key);
 
   @override
   _UserHomeScreenState createState() => _UserHomeScreenState();
@@ -85,13 +87,19 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
-              child: Text('Drawer Header'),
+              child: Text('Drawer'),
             ),
             ListTile(
               leading: const Icon(Icons.person),
               title: const Text('Profile'),
               onTap: () {
-                // TODO: Navigate to the user profile screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ProfileScreen(userEmail: widget.userEmail),
+                  ),
+                );
               },
             ),
             ListTile(
