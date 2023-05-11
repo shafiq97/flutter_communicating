@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_comunicating/manager/manager_screen.dart';
 import 'package:flutter_comunicating/user/user_screen.dart';
 import 'auth/login.dart';
 import 'auth/register.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegistrationScreen(),
         '/home': (context) => const HomeScreen(),
         '/employee': (context) => const UserHomeScreen(),
+        '/manager': (context) => const ManagerScreen(),
         '/login': (context) => const LoginScreen()
       },
       onUnknownRoute: (settings) {
