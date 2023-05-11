@@ -139,7 +139,7 @@ class _ManagerManageTasksState extends State<ManagerManageTasks> {
               leading: const Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: () {
-                // Implement your logout functionality here
+                _showLogoutConfirmationDialog();
               },
             ),
           ],
