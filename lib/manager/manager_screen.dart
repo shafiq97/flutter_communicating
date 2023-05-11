@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../auth/login.dart';
+import '../shared/message.dart';
+import '../shared/profile.dart';
 
 class ManagerScreen extends StatefulWidget {
   final String userEmail;
@@ -101,6 +103,19 @@ class _ManagerScreenState extends State<ManagerScreen> {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Profile'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ProfileScreen(userEmail: widget.userEmail),
+                  ),
+                );
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: () {
@@ -150,6 +165,19 @@ class _ManagerScreenState extends State<ManagerScreen> {
                   child: ListTile(
                     title: Text(employee['name']),
                     subtitle: Text(employee['email']),
+                    trailing: IconButton(
+                      icon: Icon(Icons.message),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MessageScreen(
+                              userEmail: employee['email'],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 );
               },
