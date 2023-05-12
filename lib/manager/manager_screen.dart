@@ -75,23 +75,38 @@ class _ManagerScreenState extends State<ManagerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Employees'),
+        title: const Text(
+          'Employees',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        elevation: 0,
+        centerTitle: true,
       ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(
+            UserAccountsDrawerHeader(
+              accountName: const Text(
+                'Task Management',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              accountEmail: Text(widget.userEmail),
+              decoration: const BoxDecoration(
                 color: Colors.blue,
               ),
-              child: Text('Drawer'),
             ),
             ListTile(
               leading: const Icon(Icons.home),
-              title: const Text('Home'),
+              title: const Text('Summary'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pushNamed(context, '/manager_dashboard');
               },
             ),
             ListTile(
@@ -119,8 +134,7 @@ class _ManagerScreenState extends State<ManagerScreen> {
               leading: const Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: () {
-                // Implement your logout functionality here
-                _showLogoutConfirmationDialog;
+                _showLogoutConfirmationDialog();
               },
             ),
           ],

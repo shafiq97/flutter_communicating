@@ -114,11 +114,18 @@ class _ManagerManageTasksState extends State<ManagerManageTasks> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(
+            UserAccountsDrawerHeader(
+              accountName: const Text(
+                'Task Management',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              accountEmail: Text(widget.email),
+              decoration: const BoxDecoration(
                 color: Colors.blue,
               ),
-              child: Text('Drawer'),
             ),
             ListTile(
               leading: const Icon(Icons.home),
@@ -133,6 +140,19 @@ class _ManagerManageTasksState extends State<ManagerManageTasks> {
               onTap: () {
                 Navigator.pushNamed(context, '/manager_task_screen',
                     arguments: widget.email);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Profile'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ProfileScreen(userEmail: widget.email),
+                  ),
+                );
               },
             ),
             ListTile(
@@ -205,6 +225,9 @@ class _ManagerManageTasksState extends State<ManagerManageTasks> {
                           Text(task['description']),
                           const SizedBox(height: 4.0),
                           Text('Assignee: ${task['assignee']}'),
+                          const SizedBox(height: 4.0),
+                          Text(
+                              'Status: ${task['completed'] == '1' ? 'Completed' : 'Not Complete'}'),
                         ],
                       ),
                     ),

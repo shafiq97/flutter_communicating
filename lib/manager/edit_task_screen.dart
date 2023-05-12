@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mailer/mailer.dart';
 
 class EditTaskManagerScreen extends StatefulWidget {
   final Map<String, dynamic> task;
@@ -23,6 +24,38 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
   late final TextEditingController _descriptionController;
   late List<Map<String, dynamic>> _employees = [];
   String? _selectedAssignee;
+  bool _isTaskCompleted = false;
+
+  // void sendEmailNotification(
+  //     String recipientEmail, String subject, String message) async {
+  //   // Configure the SMTP server details (Mailtrap)
+  //   final smtpServer = SmtpServer('smtp.mailtrap.io',
+  //       port: 587,
+  //       username: 'YOUR_MAILTRAP_USERNAME',
+  //       password: 'YOUR_MAILTRAP_PASSWORD',
+  //       securityEnabled: true);
+
+  //   // Create the email message
+  //   final message = Message()
+  //     ..from = Address('your-email@example.com', 'Your Name')
+  //     ..recipients.add(recipientEmail)
+  //     ..subject = subject
+  //     ..text = message;
+
+  //   try {
+  //     // Send the email
+  //     final sendReport = await send(message, smtpServer);
+
+  //     // Check if the email was sent successfully
+  //     if (sendReport.sent) {
+  //       print('Email notification sent to $recipientEmail');
+  //     } else {
+  //       print('Failed to send email notification');
+  //     }
+  //   } catch (e) {
+  //     print('Error sending email notification: $e');
+  //   }
+  // }
 
   @override
   void initState() {
@@ -32,6 +65,7 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
     _titleController = TextEditingController(text: widget.task['title']);
     _descriptionController =
         TextEditingController(text: widget.task['description']);
+    _isTaskCompleted = widget.task['completed'] == '1';
 
     // Fetch the list of employees for the dropdown menu
     _fetchEmployees();
@@ -74,9 +108,17 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
         'id': widget.task['id'].toString(),
         'title': _titleController.text,
         'description': _descriptionController.text,
-        'assignee': _selectedAssignee ?? '', // Assignee email or ID
+        'assignee': _selectedAssignee ?? '',
+        'completed': _isTaskCompleted ? '1' : '0',
       },
     );
+
+    // Send an email notification to the assignee
+    // sendEmailNotification(
+    //   _selectedAssignee ?? '',
+    //   'Task Updated',
+    //   'The task has been updated.',
+    // );
 
     // Parse the JSON response and show a snackbar with the message
     final data = jsonDecode(response.body);
@@ -138,6 +180,16 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
                   child: Text(employee['name']),
                 );
               }).toList(),
+            ),
+            const SizedBox(height: 16.0),
+            CheckboxListTile(
+              title: const Text('Task Completed'),
+              value: _isTaskCompleted,
+              onChanged: (bool? value) {
+                setState(() {
+                  _isTaskCompleted = value ?? false;
+                });
+              },
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(

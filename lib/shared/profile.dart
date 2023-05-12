@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String userEmail;
@@ -15,6 +16,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _contactController = TextEditingController();
 
   @override
   void initState() {
@@ -35,6 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         _nameController.text = data['name'];
         _emailController.text = data['email'];
+        _contactController.text = data['contact'];
       });
     } else {
       // Handle API errors
@@ -59,6 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: {
         'name': _nameController.text,
         'email': _emailController.text,
+        'contact': _contactController.text
       },
     );
 
@@ -95,6 +99,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Center(
+              child: Lottie.asset(
+                'assets/profile.json',
+                height: 200,
+                width: 200,
+                fit: BoxFit.cover,
+              ),
+            ),
             const Text('Name:'),
             TextFormField(
               controller: _nameController,
@@ -106,6 +118,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(hintText: 'Enter your email'),
+            ),
+            const SizedBox(height: 16),
+            const Text('Contact:'),
+            TextFormField(
+              controller: _contactController,
+              decoration: const InputDecoration(hintText: 'Enter your contact'),
             ),
             const SizedBox(height: 16),
             ElevatedButton(

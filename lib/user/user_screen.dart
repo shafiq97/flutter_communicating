@@ -7,6 +7,7 @@ import '../auth/login.dart';
 import '../shared/profile.dart';
 import 'add_task_screen.dart';
 import 'edit_task_screen.dart';
+import 'inbox.dart';
 
 class UserHomeScreen extends StatefulWidget {
   final String userEmail;
@@ -129,6 +130,19 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   MaterialPageRoute(
                     builder: (context) =>
                         ProfileScreen(userEmail: widget.userEmail),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Inbox'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        InboxScreen(userEmail: widget.userEmail),
                   ),
                 );
               },

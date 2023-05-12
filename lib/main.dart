@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_comunicating/manager/dashboard.dart';
 import 'package:flutter_comunicating/manager/manager_screen.dart';
 import 'package:flutter_comunicating/manager/tasks.dart';
 import 'package:flutter_comunicating/user/user_screen.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
             userEmail: ModalRoute.of(context)!.settings.arguments as String),
         '/manager': (context) => ManagerScreen(
             userEmail: ModalRoute.of(context)!.settings.arguments as String),
+        '/manager_dashboard': (context) => const ManagerDashboard(),
         '/manager_task_screen': (context) => ManagerManageTasks(
             email: ModalRoute.of(context)!.settings.arguments as String),
         '/login': (context) => const LoginScreen()
