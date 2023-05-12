@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -20,6 +21,7 @@ class EditTaskScreen extends StatefulWidget {
 class _EditTaskScreenState extends State<EditTaskScreen> {
   late final TextEditingController _titleController;
   late final TextEditingController _descriptionController;
+  late final TextEditingController _progressController;
 
   @override
   void initState() {
@@ -29,6 +31,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     _titleController = TextEditingController(text: widget.task['title']);
     _descriptionController =
         TextEditingController(text: widget.task['description']);
+    _progressController = TextEditingController(text: widget.task['progress']);
   }
 
   @override
@@ -36,17 +39,34 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     // Dispose the text controllers when the screen is closed
     _titleController.dispose();
     _descriptionController.dispose();
+    _progressController.dispose();
     super.dispose();
+  }
+
+  double _getProgressValue() {
+    if (_progressController.text.isEmpty) {
+      return 0;
+    }
+
+    int progress = int.parse(_progressController.text);
+    return progress / 100.0;
   }
 
   void _updateTask() async {
     // Send an HTTP request to update the task
+    log(widget.task['id'].toString());
+    log(_titleController.text);
+    log(_descriptionController.text);
+    log(_progressController.text);
     final response = await http.post(
       Uri.parse('http://172.20.10.3/flutter_communicating_api/update_task.php'),
       body: {
         'id': widget.task['id'].toString(),
         'title': _titleController.text,
         'description': _descriptionController.text,
+        'progress': _progressController.text,
+        'completed': '0',
+        'assignee': widget.task['assignee'].toString()
       },
     );
 
@@ -61,6 +81,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       'id': widget.task['id'],
       'title': _titleController.text,
       'description': _descriptionController.text,
+      'progress': _progressController.text,
     });
 
     // Close the screen
@@ -91,6 +112,21 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                 labelText: 'Description',
               ),
               maxLines: null,
+            ),
+            const SizedBox(height: 16.0),
+            TextField(
+              keyboardType: const TextInputType.numberWithOptions(),
+              controller: _progressController,
+              decoration: const InputDecoration(
+                labelText: 'Progress %',
+              ),
+              maxLines: null,
+            ),
+            // Progress bar
+            LinearProgressIndicator(
+              value: _getProgressValue(),
+              backgroundColor: Colors.grey, // The color of the track
+              color: Colors.green, // The color of the progress bar
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
