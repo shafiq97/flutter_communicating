@@ -94,43 +94,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: const Text('Profile'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Lottie.asset(
-                'assets/profile.json',
-                height: 200,
-                width: 200,
-                fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Lottie.asset(
+                  'assets/profile.json',
+                  height: 200,
+                  width: 200,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            const Text('Name:'),
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(hintText: 'Enter your name'),
-            ),
-            const SizedBox(height: 16),
-            const Text('Email:'),
-            TextFormField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(hintText: 'Enter your email'),
-            ),
-            const SizedBox(height: 16),
-            const Text('Contact:'),
-            TextFormField(
-              controller: _contactController,
-              decoration: const InputDecoration(hintText: 'Enter your contact'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _saveChanges,
-              child: const Text('Save Changes'),
-            ),
-          ],
+              const Text('Name:'),
+              TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(hintText: 'Enter your name'),
+              ),
+              const SizedBox(height: 16),
+              const Text('Email:'),
+              TextFormField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(hintText: 'Enter your email'),
+              ),
+              const SizedBox(height: 16),
+              const Text('Contact:'),
+              TextFormField(
+                controller: _contactController,
+                decoration:
+                    const InputDecoration(hintText: 'Enter your contact'),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _saveChanges,
+                child: const Text('Save Changes'),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -64,6 +64,7 @@ class _ManagerManageTasksState extends State<ManagerManageTasks> {
       context,
       MaterialPageRoute(
         builder: (context) => AddTaskScreen(
+          userEmail: widget.email,
           addTaskCallback: (newTask) {
             setState(() {
               _tasks.add(newTask);

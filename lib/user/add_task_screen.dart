@@ -5,8 +5,9 @@ import 'package:http/http.dart' as http;
 
 class AddTaskScreen extends StatefulWidget {
   final void Function(Map<String, dynamic> newTask) addTaskCallback;
-
-  const AddTaskScreen({Key? key, required this.addTaskCallback})
+  final userEmail;
+  const AddTaskScreen(
+      {Key? key, required this.addTaskCallback, required this.userEmail})
       : super(key: key);
 
   @override
@@ -29,7 +30,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         body: {
           'title': _title,
           'description': _description,
-          'assigned_to': 'shafiq@gmail.com',
+          'assigned_to': widget.userEmail,
         },
       );
 
@@ -44,7 +45,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         'id': data['id'],
         'title': _title,
         'description': _description,
-        'assigned_to': 'shafiq@gmail.com',
+        'assigned_to': widget.userEmail,
       };
       widget.addTaskCallback(newTask);
 

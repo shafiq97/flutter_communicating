@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import '../auth/login.dart';
 import '../shared/profile.dart';
 import 'add_task_screen.dart';
+import 'complaint.dart';
 import 'edit_task_screen.dart';
 import 'inbox.dart';
 
@@ -65,6 +66,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AddTaskScreen(
+          userEmail: widget.userEmail,
           addTaskCallback: (newTask) {
             setState(() {
               _tasks.add(newTask);
@@ -135,7 +137,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.person),
+              leading: const Icon(Icons.inbox),
               title: const Text('Inbox'),
               onTap: () {
                 Navigator.push(
@@ -143,6 +145,19 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   MaterialPageRoute(
                     builder: (context) =>
                         InboxScreen(userEmail: widget.userEmail),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.inbox),
+              title: const Text('Complain'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        Complaint(userEmail: widget.userEmail),
                   ),
                 );
               },

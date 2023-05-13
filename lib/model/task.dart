@@ -4,6 +4,7 @@ class Task {
   final String description;
   final String status;
   final String completed;
+  final String assignee;
 
   Task({
     required this.id,
@@ -11,6 +12,7 @@ class Task {
     required this.description,
     required this.status,
     required this.completed,
+    required this.assignee,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class Task {
       description: json['description'].toString(),
       status: json['status'].toString(),
       completed: json['completed'].toString(),
+      assignee: json['assignee'].toString(),
     );
   }
 }
