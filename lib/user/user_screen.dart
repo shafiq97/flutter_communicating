@@ -189,6 +189,20 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               itemCount: _tasks.length,
               itemBuilder: (context, index) {
                 final task = _tasks[index];
+                Color tileColor; // declare a variable for color
+
+                // decide color based on priority
+                switch (task['priority']) {
+                  case 'High':
+                    tileColor = Colors.red;
+                    break;
+                  case 'Medium':
+                    tileColor = Colors.yellow;
+                    break;
+                  default:
+                    tileColor = Colors.white;
+                    break;
+                }
                 return Dismissible(
                   key: Key(task['id'].toString()),
                   direction: DismissDirection.startToEnd,
@@ -235,9 +249,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         ),
                       );
                     },
-                    child: ListTile(
-                      title: Text(task['title']),
-                      subtitle: Text(task['description']),
+                    child: Container(
+                      decoration:
+                          BoxDecoration(color: tileColor), // set the color here
+                      child: ListTile(
+                        title: Text(task['title']),
+                        subtitle: Text(task['description']),
+                        trailing: Text(task['priority']),
+                      ),
                     ),
                   ),
                 );

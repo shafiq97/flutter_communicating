@@ -92,7 +92,7 @@ class _ManagerScreenState extends State<ManagerScreen> {
           children: <Widget>[
             UserAccountsDrawerHeader(
               accountName: const Text(
-                'Task Management',
+                'Project and Task Management',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

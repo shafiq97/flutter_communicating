@@ -26,6 +26,7 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
   late final TextEditingController _descriptionController;
   late List<Map<String, dynamic>> _employees = [];
   String? _selectedAssignee;
+  String? _selectedPriority;
   bool _isTaskCompleted = false;
 
   void sendEmailNotification(
@@ -64,7 +65,7 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
     if (widget.task['assigned_to'].toString().isNotEmpty) {
       _selectedAssignee = widget.task['assigned_to'];
     }
-
+    _selectedPriority = widget.task['priority'];
     // Fetch the list of employees for the dropdown menu
     _fetchEmployees();
   }
@@ -90,6 +91,14 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
         .map((employee) => Map<String, dynamic>.from(employee)));
     setState(() {
       _employees = employees;
+
+      // Check if _selectedAssignee is in the list of employees' emails
+      if (_selectedAssignee != null &&
+          !_employees
+              .map((employee) => employee['email'])
+              .contains(_selectedAssignee)) {
+        _selectedAssignee = null;
+      }
     });
   }
 
@@ -100,7 +109,12 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
     log(_descriptionController.text);
     log(_selectedAssignee ?? 'asas');
     log(_isTaskCompleted.toString());
-
+    if (_selectedAssignee == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select an assignee')),
+      );
+      return;
+    }
     final response = await http.post(
       Uri.parse(
           'http://192.168.68.100/flutter_communicating_api/update_task.php'),
@@ -110,6 +124,7 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
         'description': _descriptionController.text,
         'assignee': _selectedAssignee ?? '',
         'completed': _isTaskCompleted ? '1' : '0',
+        'priority': _selectedPriority ?? 'Low', // default value is 'Low'
       },
     );
 
@@ -128,16 +143,19 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
     );
 
     // Call the edit task callback with the updated task data
-    widget.editTaskCallback({
-      'id': widget.task['id'],
-      'title': _titleController.text,
-      'description': _descriptionController.text,
-      'assignee': _selectedAssignee,
-    });
+    // widget.editTaskCallback({
+    //   'id': widget.task['id'],
+    //   'title': _titleController.text,
+    //   'description': _descriptionController.text,
+    //   'assignee': _selectedAssignee,
+    //   'priority': _selectedPriority,
+    // });
+
+    _fetchEmployees();
 
     // Close the screen
     // ignore: use_build_context_synchronously
-    Navigator.pop(context);
+    // Navigator.pushNamed(context, '/employee');
   }
 
   @override
@@ -173,17 +191,58 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
                   _selectedAssignee = newValue;
                 });
               },
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Assignee',
+                helperText: _selectedAssignee == null
+                    ? 'Please select an assignee'
+                    : null,
               ),
-              items: _employees.map((employee) {
-                return DropdownMenuItem<String>(
-                  value: employee['email'],
-                  child: Text(employee['name']),
-                );
-              }).toList(),
+              items: [
+                const DropdownMenuItem<String>(
+                  value: null,
+                  child: Text('Please select an assignee'),
+                ),
+                ..._employees.map((employee) {
+                  return DropdownMenuItem<String>(
+                    value: employee['email'],
+                    child: Text(employee['name']),
+                  );
+                }).toList(),
+              ],
             ),
             const SizedBox(height: 16.0),
+            DropdownButtonFormField<String>(
+              value: _selectedPriority,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedPriority = newValue;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Priority',
+                helperText: _selectedPriority == null
+                    ? 'Please select a priority'
+                    : null,
+              ),
+              items: const [
+                DropdownMenuItem<String>(
+                  value: null,
+                  child: Text('Please select a priority'),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'High',
+                  child: Text('High'),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'Medium',
+                  child: Text('Medium'),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'Low',
+                  child: Text('Low'),
+                ),
+              ],
+            ),
             CheckboxListTile(
               title: const Text('Task Completed'),
               value: _isTaskCompleted,

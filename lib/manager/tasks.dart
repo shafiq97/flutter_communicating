@@ -23,11 +23,21 @@ class _ManagerManageTasksState extends State<ManagerManageTasks> {
   bool _isLoading = true;
   List<Map<String, dynamic>> _tasks = [];
 
+  late final TextEditingController _progressController;
   @override
   void initState() {
     super.initState();
     // Fetch the tasks for the logged-in user
     _fetchTasks();
+  }
+
+  double _getProgressValue() {
+    if (_progressController.text.isEmpty) {
+      return 0;
+    }
+
+    int progress = int.parse(_progressController.text);
+    return progress / 100.0;
   }
 
   void _fetchTasks() async {
@@ -119,7 +129,7 @@ class _ManagerManageTasksState extends State<ManagerManageTasks> {
           children: <Widget>[
             UserAccountsDrawerHeader(
               accountName: const Text(
-                'Task Management',
+                'Project and Task Management',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -244,6 +254,13 @@ class _ManagerManageTasksState extends State<ManagerManageTasks> {
                           const SizedBox(height: 4.0),
                           Text(
                               'Status: ${task['completed'] == '1' ? 'Completed' : 'Not Complete'}'),
+                          const SizedBox(height: 4.0),
+                          LinearProgressIndicator(
+                            value: int.parse(task['progress']) /
+                                100.0, // Normalized progress value
+                            backgroundColor: Colors.grey[200],
+                            color: Colors.blue,
+                          ),
                         ],
                       ),
                     ),

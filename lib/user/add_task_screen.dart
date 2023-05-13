@@ -42,16 +42,18 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       );
 
       // Create a new map representing the new task and pass it back to the parent widget
-      final newTask = {
-        'id': data['id'],
-        'title': _title,
-        'description': _description,
-        'assigned_to': widget.userEmail,
-      };
-      widget.addTaskCallback(newTask);
+      // final newTask = {
+      //   'id': data['id'],
+      //   'title': _title,
+      //   'description': _description,
+      //   'assigned_to': widget.userEmail,
+      // };
+
+      // widget.addTaskCallback(newTask);
 
       // Navigate back to the user home screen
       // Navigator.pop(context);
+      Navigator.pushNamed(context, '/employee', arguments: widget.userEmail);
     }
   }
 
