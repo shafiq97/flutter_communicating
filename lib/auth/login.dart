@@ -8,6 +8,7 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginScreenState createState() => _LoginScreenState();
 }
 
@@ -43,16 +44,19 @@ class _LoginScreenState extends State<LoginScreen> {
           // Check the role of the user
           if (data['role'] == 'manager') {
             // Navigate to the manager screen if the user is a manager
+            // ignore: use_build_context_synchronously
             Navigator.pushNamed(context, '/manager', arguments: data['email']);
           } else {
             // Navigate to the user screen if the user is not a manager
+            // ignore: use_build_context_synchronously
             Navigator.pushNamed(context, '/employee', arguments: data['email']);
           }
         }
       } else {
         // Handle null response
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: No response from server')),
+          const SnackBar(content: Text('Error: No response from server')),
         );
       }
     }

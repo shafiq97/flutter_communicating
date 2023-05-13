@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'dart:convert';
@@ -13,6 +15,7 @@ class ManagerDashboard extends StatefulWidget {
 }
 
 class _ManagerDashboardState extends State<ManagerDashboard> {
+  // ignore: unused_field
   List<Task> _tasks = [];
   List<TaskSummary> _taskSummaries = [];
   int _employeeCount = 0;
@@ -38,6 +41,7 @@ class _ManagerDashboardState extends State<ManagerDashboard> {
       });
     } else {
       // Handle API errors
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error: Failed to fetch user counts')),
       );
@@ -62,6 +66,7 @@ class _ManagerDashboardState extends State<ManagerDashboard> {
       });
     } else {
       // Handle API errors
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error: Failed to fetch tasks')),
       );

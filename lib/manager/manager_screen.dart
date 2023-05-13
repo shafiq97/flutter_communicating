@@ -175,6 +175,7 @@ class _ManagerScreenState extends State<ManagerScreen> {
 
                     // Parse the JSON response and show a snackbar with the message
                     final data = jsonDecode(response.body);
+                    // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(data['message'])),
                     );

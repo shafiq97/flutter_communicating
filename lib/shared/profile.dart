@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
@@ -10,6 +8,7 @@ class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key, required this.userEmail}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
@@ -21,7 +20,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // TODO: Fetch user data and set the values of _nameController and _emailController
     _emailController.text = widget.userEmail;
     _fetchUserData();
   }
@@ -41,8 +39,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
     } else {
       // Handle API errors
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: Failed to fetch user data')),
+        const SnackBar(content: Text('Error: Failed to fetch user data')),
       );
     }
   }
@@ -71,19 +70,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final data = jsonDecode(response.body);
       if (data['success']) {
         // Show success message
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(data['message'])),
         );
       } else {
         // Show error message
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(data['message'])),
         );
       }
     } else {
       // Handle null response
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: No response from server')),
+        const SnackBar(content: Text('Error: No response from server')),
       );
     }
   }

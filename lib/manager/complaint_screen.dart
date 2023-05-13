@@ -6,13 +6,14 @@ import 'package:http/http.dart' as http;
 import '../auth/login.dart';
 import '../shared/profile.dart';
 import '../user/add_task_screen.dart';
-import 'edit_task_screen.dart';
 
+// ignore: must_be_immutable
 class ComplaintsScreen extends StatefulWidget {
   String email;
   ComplaintsScreen({Key? key, required this.email}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ComplaintsScreenState createState() => _ComplaintsScreenState();
 }
 
@@ -65,12 +66,14 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
     });
   }
 
+  // ignore: unused_element
   void _addTask(Map<String, dynamic> newTask) {
     setState(() {
       _tasks.add(newTask);
     });
   }
 
+  // ignore: unused_element
   void _navigateToAddTaskScreen() {
     Navigator.push(
       context,
@@ -201,7 +204,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
                   builder: (BuildContext context,
                       AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else {

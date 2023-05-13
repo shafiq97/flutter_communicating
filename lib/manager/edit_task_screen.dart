@@ -17,6 +17,7 @@ class EditTaskManagerScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _EditTaskManagerScreenState createState() => _EditTaskManagerScreenState();
 }
 
@@ -121,6 +122,7 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
 
     // Parse the JSON response and show a snackbar with the message
     final data = jsonDecode(response.body);
+    // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(data['message'])),
     );
@@ -134,6 +136,7 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
     });
 
     // Close the screen
+    // ignore: use_build_context_synchronously
     Navigator.pop(context);
   }
 

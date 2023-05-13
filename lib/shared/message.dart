@@ -12,11 +12,12 @@ class MessageScreen extends StatefulWidget {
       : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _MessageScreenState createState() => _MessageScreenState();
 }
 
 class _MessageScreenState extends State<MessageScreen> {
-  TextEditingController _messageController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
 
   void _sendMessage() async {
     String message = _messageController.text;
@@ -42,6 +43,7 @@ class _MessageScreenState extends State<MessageScreen> {
     final data = jsonDecode(response.body);
 
     // Display a snackbar with the response message
+    // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(data['message'])),
     );

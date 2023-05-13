@@ -9,11 +9,13 @@ import '../user/add_task_screen.dart';
 import 'complaint_screen.dart';
 import 'edit_task_screen.dart';
 
+// ignore: must_be_immutable
 class ManagerManageTasks extends StatefulWidget {
   String email;
   ManagerManageTasks({Key? key, required this.email}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ManagerManageTasksState createState() => _ManagerManageTasksState();
 }
 
@@ -51,12 +53,14 @@ class _ManagerManageTasksState extends State<ManagerManageTasks> {
     });
   }
 
+  // ignore: unused_element
   void _addTask(Map<String, dynamic> newTask) {
     setState(() {
       _tasks.add(newTask);
     });
   }
 
+  // ignore: unused_element
   void _navigateToAddTaskScreen() {
     Navigator.push(
       context,
@@ -197,6 +201,7 @@ class _ManagerManageTasksState extends State<ManagerManageTasks> {
 
                     // Parse the JSON response and show a snackbar with the message
                     final data = jsonDecode(response.body);
+                    // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(data['message'])),
                     );
