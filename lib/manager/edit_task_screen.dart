@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 
 class EditTaskManagerScreen extends StatefulWidget {
   final Map<String, dynamic> task;
@@ -26,36 +27,29 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
   String? _selectedAssignee;
   bool _isTaskCompleted = false;
 
-  // void sendEmailNotification(
-  //     String recipientEmail, String subject, String message) async {
-  //   // Configure the SMTP server details (Mailtrap)
-  //   final smtpServer = SmtpServer('smtp.mailtrap.io',
-  //       port: 587,
-  //       username: 'YOUR_MAILTRAP_USERNAME',
-  //       password: 'YOUR_MAILTRAP_PASSWORD',
-  //       securityEnabled: true);
+  void sendEmailNotification(
+      String recipientEmail, String subject, String message) async {
+    // Configure the SMTP server details (Mailtrap)
+    final smtpServer = gmail("muhammadshafiq457@gmail.com", "vybjkqrynlszagnj");
 
-  //   // Create the email message
-  //   final message = Message()
-  //     ..from = Address('your-email@example.com', 'Your Name')
-  //     ..recipients.add(recipientEmail)
-  //     ..subject = subject
-  //     ..text = message;
+    // Create the email message
+    final message = Message()
+      ..from = const Address('task-management-admin@gmail.com', 'Admin@NoReply')
+      ..recipients.add(recipientEmail)
+      ..subject = subject
+      ..text = "This is to inform that a new task has been assigned to you";
 
-  //   try {
-  //     // Send the email
-  //     final sendReport = await send(message, smtpServer);
-
-  //     // Check if the email was sent successfully
-  //     if (sendReport.sent) {
-  //       print('Email notification sent to $recipientEmail');
-  //     } else {
-  //       print('Failed to send email notification');
-  //     }
-  //   } catch (e) {
-  //     print('Error sending email notification: $e');
-  //   }
-  // }
+    try {
+      final sendReport = await send(message, smtpServer);
+      log('Message sent: $sendReport');
+    } on MailerException catch (e) {
+      log('Message not sent.');
+      log(e.toString());
+      for (var p in e.problems) {
+        log('Problem: ${p.code}: ${p.msg}');
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -119,11 +113,11 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
     );
 
     // Send an email notification to the assignee
-    // sendEmailNotification(
-    //   _selectedAssignee ?? '',
-    //   'Task Updated',
-    //   'The task has been updated.',
-    // );
+    sendEmailNotification(
+      _selectedAssignee ?? '',
+      'Task Updated',
+      'The task has been updated.',
+    );
 
     // Parse the JSON response and show a snackbar with the message
     final data = jsonDecode(response.body);
