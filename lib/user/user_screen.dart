@@ -31,10 +31,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   void _fetchTasks() async {
-    const String email =
-        'shafiq@gmail.com'; // Replace with the email address of the logged-in user
+    String email = widget
+        .userEmail; // Replace with the email address of the logged-in user
     final Uri uri = Uri.parse(
-        'http://172.20.10.3/flutter_communicating_api/get_tasks.php?email=$email');
+        'http://192.168.68.100/flutter_communicating_api/get_tasks.php?email=$email');
 
     // Send an HTTP request to the API to fetch the tasks
     final response = await http.get(uri);
@@ -150,8 +150,21 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.task),
+              title: const Text('Tasks'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        UserHomeScreen(userEmail: widget.userEmail),
+                  ),
+                );
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.inbox),
-              title: const Text('Complain'),
+              title: const Text('Complaints'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -183,7 +196,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     // Send an HTTP request to delete the task
                     final response = await http.post(
                       Uri.parse(
-                          'http://172.20.10.3/flutter_communicating_api/delete_task.php'),
+                          'http://192.168.68.100/flutter_communicating_api/delete_task.php'),
                       body: {
                         'id': task['id'].toString(),
                       },

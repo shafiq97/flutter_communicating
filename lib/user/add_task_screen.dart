@@ -26,7 +26,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       // Send an HTTP request to the API to create the task
       final response = await http.post(
         Uri.parse(
-            'http://172.20.10.3/flutter_communicating_api/create_task.php'),
+            'http://192.168.68.100/flutter_communicating_api/create_task.php'),
         body: {
           'title': _title,
           'description': _description,

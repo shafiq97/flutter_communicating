@@ -28,7 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _fetchUserData() async {
     final Uri uri = Uri.parse(
-        'http://172.20.10.3/flutter_communicating_api/get_profile.php?email=${widget.userEmail}');
+        'http://192.168.68.100/flutter_communicating_api/get_profile.php?email=${widget.userEmail}');
 
     final response = await http.get(uri);
 
@@ -58,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // Send an HTTP request to the save_profile API
     final response = await http.post(
       Uri.parse(
-          'http://172.20.10.3/flutter_communicating_api/save_profile.php'),
+          'http://192.168.68.100/flutter_communicating_api/save_profile.php'),
       body: {
         'name': _nameController.text,
         'email': _emailController.text,

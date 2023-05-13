@@ -33,7 +33,7 @@ class _MessageScreenState extends State<MessageScreen> {
     // Send an HTTP request to insert the message
     final response = await http.post(
       Uri.parse(
-          'http://172.20.10.3/flutter_communicating_api/send_message.php'),
+          'http://192.168.68.100/flutter_communicating_api/send_message.php'),
       body: jsonEncode(messageData),
       headers: {'Content-Type': 'application/json'},
     );

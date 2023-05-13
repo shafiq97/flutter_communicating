@@ -66,6 +66,9 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
     _descriptionController =
         TextEditingController(text: widget.task['description']);
     _isTaskCompleted = widget.task['completed'] == '1';
+    if (widget.task['assigned_to'].toString().isNotEmpty) {
+      _selectedAssignee = widget.task['assigned_to'];
+    }
 
     // Fetch the list of employees for the dropdown menu
     _fetchEmployees();
@@ -81,7 +84,7 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
 
   void _fetchEmployees() async {
     final Uri uri = Uri.parse(
-        'http://172.20.10.3/flutter_communicating_api/get_employees.php');
+        'http://192.168.68.100/flutter_communicating_api/get_employees.php');
 
     // Send an HTTP request to the API to fetch the employees
     final response = await http.get(uri);
@@ -100,10 +103,12 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
     log(widget.task['id']);
     log(_titleController.text);
     log(_descriptionController.text);
-    log(_selectedAssignee ?? '');
+    log(_selectedAssignee ?? 'asas');
+    log(_isTaskCompleted.toString());
 
     final response = await http.post(
-      Uri.parse('http://172.20.10.3/flutter_communicating_api/update_task.php'),
+      Uri.parse(
+          'http://192.168.68.100/flutter_communicating_api/update_task.php'),
       body: {
         'id': widget.task['id'].toString(),
         'title': _titleController.text,

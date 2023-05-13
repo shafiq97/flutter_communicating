@@ -26,7 +26,7 @@ class _ManagerDashboardState extends State<ManagerDashboard> {
 
   Future<void> _fetchUserCounts() async {
     final Uri uri = Uri.parse(
-        'http://172.20.10.3/flutter_communicating_api/user_counts.php');
+        'http://192.168.68.100/flutter_communicating_api/user_counts.php');
 
     final response = await http.get(uri);
 
@@ -45,8 +45,8 @@ class _ManagerDashboardState extends State<ManagerDashboard> {
   }
 
   Future<void> _fetchTasks() async {
-    final Uri uri =
-        Uri.parse('http://172.20.10.3/flutter_communicating_api/dashboard.php');
+    final Uri uri = Uri.parse(
+        'http://192.168.68.100/flutter_communicating_api/dashboard.php');
 
     final response = await http.get(uri);
 

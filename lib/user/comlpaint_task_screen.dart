@@ -63,7 +63,7 @@ class _ComplaintTaskScreenState extends State<ComplaintTaskScreen> {
     log(widget.task['assigned_to'].toString());
     final response = await http.post(
       Uri.parse(
-          'http://172.20.10.3/flutter_communicating_api/add_complaint.php'),
+          'http://192.168.68.100/flutter_communicating_api/add_complaint.php'),
       body: {
         'task_id': widget.task['id'].toString(),
         'complaint_message': _complaintController.text,

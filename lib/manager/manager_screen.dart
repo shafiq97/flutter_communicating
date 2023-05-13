@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_comunicating/manager/complaint_screen.dart';
 import 'package:http/http.dart' as http;
 
 import '../auth/login.dart';
@@ -26,7 +27,7 @@ class _ManagerScreenState extends State<ManagerScreen> {
 
   void _fetchEmployees() async {
     final Uri uri = Uri.parse(
-        'http://172.20.10.3/flutter_communicating_api/get_employees.php');
+        'http://192.168.68.100/flutter_communicating_api/get_employees.php');
 
     // Send an HTTP request to the API to fetch the employees
     final response = await http.get(uri);
@@ -119,6 +120,19 @@ class _ManagerScreenState extends State<ManagerScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.person),
+              title: const Text('Complaints'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ComplaintsScreen(email: widget.userEmail),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
               title: const Text('Profile'),
               onTap: () {
                 Navigator.push(
@@ -153,7 +167,7 @@ class _ManagerScreenState extends State<ManagerScreen> {
                     // Send an HTTP request to delete the employee
                     final response = await http.post(
                       Uri.parse(
-                          'http://172.20.10.3/flutter_communicating_api/delete_employee.php'),
+                          'http://192.168.68.100/flutter_communicating_api/delete_employee.php'),
                       body: {
                         'id': employee['id'].toString(),
                       },

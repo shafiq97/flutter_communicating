@@ -6,24 +6,24 @@ import 'package:http/http.dart' as http;
 import '../auth/login.dart';
 import '../shared/profile.dart';
 import '../user/add_task_screen.dart';
-import 'complaint_screen.dart';
 import 'edit_task_screen.dart';
 
-class ManagerManageTasks extends StatefulWidget {
+class ComplaintsScreen extends StatefulWidget {
   String email;
-  ManagerManageTasks({Key? key, required this.email}) : super(key: key);
+  ComplaintsScreen({Key? key, required this.email}) : super(key: key);
 
   @override
-  _ManagerManageTasksState createState() => _ManagerManageTasksState();
+  _ComplaintsScreenState createState() => _ComplaintsScreenState();
 }
 
-class _ManagerManageTasksState extends State<ManagerManageTasks> {
+class _ComplaintsScreenState extends State<ComplaintsScreen> {
   bool _isLoading = true;
   List<Map<String, dynamic>> _tasks = [];
 
   @override
   void initState() {
     super.initState();
+
     // Fetch the tasks for the logged-in user
     _fetchTasks();
   }
@@ -43,6 +43,20 @@ class _ManagerManageTasksState extends State<ManagerManageTasks> {
       _tasks = tasks;
       _isLoading = false;
     });
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchComplaints(String taskId) async {
+    final Uri uri = Uri.parse(
+        'http://192.168.68.100/flutter_communicating_api/get_complaints.php');
+
+    // Send an HTTP request to the API to fetch the complaints
+    final response = await http.post(uri, body: {'task_id': taskId.toString()});
+
+    // Parse the JSON response and return the list of complaints
+    final data = jsonDecode(response.body);
+    final complaints = List<Map<String, dynamic>>.from(data['complaints']
+        .map((complaint) => Map<String, dynamic>.from(complaint)));
+    return complaints;
   }
 
   void addTaskCallback() {
@@ -107,7 +121,7 @@ class _ManagerManageTasksState extends State<ManagerManageTasks> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tasks'),
+        title: const Text('Employees Complaints'),
       ),
       drawer: Drawer(
         child: ListView(
@@ -182,70 +196,31 @@ class _ManagerManageTasksState extends State<ManagerManageTasks> {
               itemCount: _tasks.length,
               itemBuilder: (context, index) {
                 final task = _tasks[index];
-                return Dismissible(
-                  key: Key(task['id'].toString()),
-                  direction: DismissDirection.startToEnd,
-                  onDismissed: (direction) async {
-                    // Send an HTTP request to delete the task
-                    final response = await http.post(
-                      Uri.parse(
-                          'http://192.168.68.100/flutter_communicating_api/delete_task.php'),
-                      body: {
-                        'id': task['id'].toString(),
-                      },
-                    );
-
-                    // Parse the JSON response and show a snackbar with the message
-                    final data = jsonDecode(response.body);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(data['message'])),
-                    );
-
-                    // Update the list of tasks
-                    setState(() {
-                      _tasks.removeAt(index);
-                    });
-                  },
-                  background: Container(
-                    color: Colors.red,
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: const Icon(Icons.delete, color: Colors.white),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditTaskManagerScreen(
-                            task: task,
-                            editTaskCallback: (editedTask) {
-                              setState(() {
-                                _tasks[index] = editedTask;
-                              });
-                            },
-                          ),
-                        ),
+                return FutureBuilder<List<Map<String, dynamic>>>(
+                  future: _fetchComplaints(task['id']),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      return ExpansionTile(
+                        title: Text(task['title']),
+                        subtitle: Text(task['assigned_to']),
+                        children: snapshot.data!.map<Widget>((complaint) {
+                          return ListTile(
+                            title: Text(complaint['complaint_message']),
+                            subtitle: Text(complaint['complainer_email']),
+                          );
+                        }).toList(),
                       );
-                    },
-                    child: ListTile(
-                      title: Text(task['title']),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(task['description']),
-                          const SizedBox(height: 4.0),
-                          Text('Assignee: ${task['assigned_to']}'),
-                          const SizedBox(height: 4.0),
-                          Text(
-                              'Status: ${task['completed'] == '1' ? 'Completed' : 'Not Complete'}'),
-                        ],
-                      ),
-                    ),
-                  ),
+                    }
+                  },
                 );
               },
             ),
+
       // floatingActionButton: FloatingActionButton(
       //   onPressed: _navigateToAddTaskScreen,
       //   child: const Icon(Icons.add),

@@ -22,7 +22,7 @@ class Task {
       description: json['description'].toString(),
       status: json['status'].toString(),
       completed: json['completed'].toString(),
-      assignee: json['assignee'].toString(),
+      assignee: json['assigned_to'].toString(),
     );
   }
 }

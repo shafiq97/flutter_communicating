@@ -29,7 +29,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
       // Send an HTTP request to the registration API
       final response = await http.post(
-        Uri.parse('http://172.20.10.3/flutter_communicating_api/register.php'),
+        Uri.parse(
+            'http://192.168.68.100/flutter_communicating_api/register.php'),
         body: {
           'email': _emailController.text,
           'password': _passwordController.text,

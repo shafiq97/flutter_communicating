@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_comunicating/user/user_screen.dart';
 import 'package:http/http.dart' as http;
 
 import '../auth/login.dart';
@@ -35,7 +36,7 @@ class _ComplaintState extends State<Complaint> {
     String email = widget
         .userEmail; // Replace with the email address of the logged-in user
     final Uri uri = Uri.parse(
-        'http://172.20.10.3/flutter_communicating_api/get_tasks.php?email=$email');
+        'http://192.168.68.100/flutter_communicating_api/get_tasks.php?email=$email');
 
     // Send an HTTP request to the API to fetch the tasks
     final response = await http.get(uri);
@@ -152,6 +153,19 @@ class _ComplaintState extends State<Complaint> {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.task),
+              title: const Text('Tasks'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        UserHomeScreen(userEmail: widget.userEmail),
+                  ),
+                );
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.inbox),
               title: const Text('Complaint'),
               onTap: () {
@@ -185,7 +199,7 @@ class _ComplaintState extends State<Complaint> {
                     // Send an HTTP request to delete the task
                     final response = await http.post(
                       Uri.parse(
-                          'http://172.20.10.3/flutter_communicating_api/delete_task.php'),
+                          'http://192.168.68.100/flutter_communicating_api/delete_task.php'),
                       body: {
                         'id': task['id'].toString(),
                       },

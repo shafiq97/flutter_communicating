@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       // Send an HTTP request to the login API
       final response = await http.post(
-        Uri.parse('http://172.20.10.3/flutter_communicating_api/login.php'),
+        Uri.parse('http://192.168.68.100/flutter_communicating_api/login.php'),
         body: {
           'email': _emailController.text,
           'password': _passwordController.text
@@ -69,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Task Mangement System'),
       ),
       body: _isLoading
           ? Center(

@@ -26,7 +26,7 @@ class _InboxScreenState extends State<InboxScreen> {
 
   void _fetchMessages() async {
     final Uri uri = Uri.parse(
-        'http://172.20.10.3/flutter_communicating_api/get_messages.php?receiver_email=${widget.userEmail}');
+        'http://192.168.68.100/flutter_communicating_api/get_messages.php?receiver_email=${widget.userEmail}');
 
     final response = await http.get(uri);
 
