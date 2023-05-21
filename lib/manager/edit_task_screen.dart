@@ -53,6 +53,8 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
     }
   }
 
+  late Future<void> _employeesFuture;
+
   @override
   void initState() {
     super.initState();
@@ -67,7 +69,7 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
     }
     _selectedPriority = widget.task['priority'];
     // Fetch the list of employees for the dropdown menu
-    _fetchEmployees();
+    _employeesFuture = _fetchEmployees();
   }
 
   @override
@@ -78,7 +80,7 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
     super.dispose();
   }
 
-  void _fetchEmployees() async {
+  Future<void> _fetchEmployees() async {
     final Uri uri = Uri.parse(
         'http://192.168.68.100/flutter_communicating_api/get_employees.php');
 
@@ -89,8 +91,26 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
     final data = jsonDecode(response.body);
     final employees = List<Map<String, dynamic>>.from(data['employees']
         .map((employee) => Map<String, dynamic>.from(employee)));
+
+    // Use a Set to store unique email addresses
+    final uniqueEmails = <String>{};
+
+    // Filter out employees with duplicate email addresses
+    final uniqueEmployees = employees.where((employee) {
+      final email = employee['email'];
+
+      // If the email is already in the set, skip this employee
+      if (uniqueEmails.contains(email)) {
+        return false;
+      }
+
+      // Otherwise, add the email to the set and include this employee
+      uniqueEmails.add(email);
+      return true;
+    }).toList();
+
     setState(() {
-      _employees = employees;
+      _employees = uniqueEmployees;
 
       // Check if _selectedAssignee is in the list of employees' emails
       if (_selectedAssignee != null &&
@@ -159,6 +179,7 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -166,98 +187,110 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: _titleController,
-              decoration: const InputDecoration(
-                labelText: 'Title',
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Description',
-              ),
-              maxLines: null,
-            ),
-            const SizedBox(height: 16.0),
-            DropdownButtonFormField<String>(
-              value: _selectedAssignee,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedAssignee = newValue;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Assignee',
-                helperText: _selectedAssignee == null
-                    ? 'Please select an assignee'
-                    : null,
-              ),
-              items: [
-                const DropdownMenuItem<String>(
-                  value: null,
-                  child: Text('Please select an assignee'),
-                ),
-                ..._employees.map((employee) {
-                  return DropdownMenuItem<String>(
-                    value: employee['email'],
-                    child: Text(employee['name']),
-                  );
-                }).toList(),
-              ],
-            ),
-            const SizedBox(height: 16.0),
-            DropdownButtonFormField<String>(
-              value: _selectedPriority,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedPriority = newValue;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Priority',
-                helperText: _selectedPriority == null
-                    ? 'Please select a priority'
-                    : null,
-              ),
-              items: const [
-                DropdownMenuItem<String>(
-                  value: null,
-                  child: Text('Please select a priority'),
-                ),
-                DropdownMenuItem<String>(
-                  value: 'High',
-                  child: Text('High'),
-                ),
-                DropdownMenuItem<String>(
-                  value: 'Medium',
-                  child: Text('Medium'),
-                ),
-                DropdownMenuItem<String>(
-                  value: 'Low',
-                  child: Text('Low'),
-                ),
-              ],
-            ),
-            CheckboxListTile(
-              title: const Text('Task Completed'),
-              value: _isTaskCompleted,
-              onChanged: (bool? value) {
-                setState(() {
-                  _isTaskCompleted = value ?? false;
-                });
-              },
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _updateTask,
-              child: const Text('Save'),
-            ),
-          ],
+        child: FutureBuilder(
+          future: _employeesFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator(); // show a loading spinner while waiting
+            } else if (snapshot.hasError) {
+              // If there's an error, display a text message
+              return Text('Error: ${snapshot.error}');
+            } else {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextField(
+                    controller: _titleController,
+                    decoration: const InputDecoration(
+                      labelText: 'Title',
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextField(
+                    controller: _descriptionController,
+                    decoration: const InputDecoration(
+                      labelText: 'Description',
+                    ),
+                    maxLines: null,
+                  ),
+                  const SizedBox(height: 16.0),
+                  DropdownButtonFormField<String>(
+                    value: _selectedAssignee,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedAssignee = newValue;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Assignee',
+                      helperText: _selectedAssignee == null
+                          ? 'Please select an assignee'
+                          : null,
+                    ),
+                    items: [
+                      const DropdownMenuItem<String>(
+                        value: null,
+                        child: Text('Please select an assignee'),
+                      ),
+                      ..._employees.map((employee) {
+                        return DropdownMenuItem<String>(
+                          value: employee['email'],
+                          child: Text(employee['name']),
+                        );
+                      }).toList(),
+                    ],
+                  ),
+                  const SizedBox(height: 16.0),
+                  DropdownButtonFormField<String>(
+                    value: _selectedPriority,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedPriority = newValue;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Priority',
+                      helperText: _selectedPriority == null
+                          ? 'Please select a priority'
+                          : null,
+                    ),
+                    items: const [
+                      DropdownMenuItem<String>(
+                        value: null,
+                        child: Text('Please select a priority'),
+                      ),
+                      DropdownMenuItem<String>(
+                        value: 'High',
+                        child: Text('High'),
+                      ),
+                      DropdownMenuItem<String>(
+                        value: 'Medium',
+                        child: Text('Medium'),
+                      ),
+                      DropdownMenuItem<String>(
+                        value: 'Low',
+                        child: Text('Low'),
+                      ),
+                    ],
+                  ),
+                  CheckboxListTile(
+                    title: const Text('Task Completed'),
+                    value: _isTaskCompleted,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        _isTaskCompleted = value ?? false;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: _updateTask,
+                    child: const Text('Save'),
+                  ),
+                ],
+              );
+            }
+          },
         ),
       ),
     );
