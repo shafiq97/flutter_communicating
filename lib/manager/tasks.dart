@@ -256,8 +256,9 @@ class _ManagerManageTasksState extends State<ManagerManageTasks> {
                               'Status: ${task['completed'] == '1' ? 'Completed' : 'Not Complete'}'),
                           const SizedBox(height: 4.0),
                           LinearProgressIndicator(
-                            value: int.parse(task['progress']) /
-                                100.0, // Normalized progress value
+                            value: (task['progress'] == null)
+                                ? 0.0
+                                : int.parse(task['progress']) / 100.0,
                             backgroundColor: Colors.grey[200],
                             color: Colors.blue,
                           ),

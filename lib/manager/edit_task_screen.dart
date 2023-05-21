@@ -163,13 +163,14 @@ class _EditTaskManagerScreenState extends State<EditTaskManagerScreen> {
     );
 
     // Call the edit task callback with the updated task data
-    // widget.editTaskCallback({
-    //   'id': widget.task['id'],
-    //   'title': _titleController.text,
-    //   'description': _descriptionController.text,
-    //   'assignee': _selectedAssignee,
-    //   'priority': _selectedPriority,
-    // });
+    widget.editTaskCallback({
+      'id': widget.task['id'],
+      'title': _titleController.text,
+      'description': _descriptionController.text,
+      'assignee': _selectedAssignee,
+      'priority': _selectedPriority,
+      'completed': _isTaskCompleted
+    });
 
     _fetchEmployees();
 
